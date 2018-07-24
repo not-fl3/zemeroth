@@ -1057,16 +1057,19 @@ pub fn create_terrain(state: &mut State) {
 pub fn create_objects(state: &mut State, cb: Cb) {
     let player_id_initial = state.player_id();
     for &(owner, typename, count) in &[
+        // /*
         (None, "spike_trap", 3),
         (None, "boulder", 7),
         (Some(PlayerId(0)), "swordsman", 1),
         (Some(PlayerId(0)), "hammerman", 1),
         (Some(PlayerId(0)), "spearman", 1),
         (Some(PlayerId(0)), "alchemist", 1),
+        (Some(PlayerId(1)), "snake", 2),
         (Some(PlayerId(1)), "imp", 3),
         (Some(PlayerId(1)), "imp_toxic", 1),
         (Some(PlayerId(1)), "imp_bomber", 2),
         (Some(PlayerId(1)), "imp_summoner", 2),
+        // */
     ] {
         if let Some(player_id) = owner {
             state.set_player_id(player_id);

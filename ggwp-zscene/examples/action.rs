@@ -49,12 +49,20 @@ impl State {
 
     fn demo_move(&mut self, context: &mut Context) -> GameResult<()> {
         let mut sprite = Sprite::from_path(context, "/fire.png", 0.5)?;
-        sprite.set_pos(Point2::new(0.0, -1.0));
-        let delta = Vector2::new(0.0, 1.5);
-        let move_duration = Duration::from_millis(2_000);
+        sprite.set_pos(Point2::new(0.0, -0.5));
+        sprite.set_offset(Vector2::new(0.5, 0.5));
+
+        // sprite.set_real_offset(Point2::new(0.5, 0.5));
+        
+        // sprite.set_offset(Vector2::new(0.0, 0.0));
+        let delta = Vector2::new(0.0, 0.5);
+        let duration_move = Duration::from_millis(2_000);
+        let duration_scale = Duration::from_millis(1_000);
         let action = action::Sequence::new(vec![
             action::Show::new(&self.layers.fg, &sprite).boxed(),
-            action::MoveBy::new(&sprite, delta, move_duration).boxed(),
+            action::MoveBy::new(&sprite, delta, duration_move).boxed(),
+            // action::ScaleTo::new(&sprite, Point2::new(0.5, 0.5), duration_scale).boxed(),
+            action::ScaleTo::new(&sprite, Point2::new(-1.0, 1.0), duration_scale).boxed(),
         ]);
         self.scene.add_action(action.boxed());
         Ok(())
@@ -65,9 +73,10 @@ impl State {
             let image = Text::new(context, "some text", &self.font)?.into_inner();
             let mut sprite = Sprite::from_image(image, 0.1);
             sprite.set_pos(Point2::new(0.0, 0.0));
-            sprite.set_scale(2.0); // just testing set_size method
+            sprite.set_scale_h(2.0); // just testing set_size method
             let scale = sprite.scale();
-            assert!((scale - 2.0).abs() < 0.001);
+            assert!((scale.y - 2.0).abs() < 0.001);
+            assert!((scale.x - 2.0).abs() < 0.001);
             sprite
         };
         let visible = [0.0, 1.0, 0.0, 1.0].into();

@@ -10,6 +10,7 @@ pub use action::sequence::Sequence;
 pub use action::set_color::SetColor;
 pub use action::show::Show;
 pub use action::sleep::Sleep;
+pub use action::scale_to::ScaleTo;
 
 mod change_color_to;
 mod empty;
@@ -20,6 +21,7 @@ mod sequence;
 mod set_color;
 mod show;
 mod sleep;
+mod scale_to;
 
 pub trait Action: Debug {
     fn begin(&mut self) {}

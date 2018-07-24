@@ -348,9 +348,13 @@ fn make_action_show_tile(state: &State, view: &BattleView, at: PosHex) -> ZResul
         TileType::Plain => view.images.tile.clone(),
         TileType::Rocks => view.images.tile_rocks.clone(),
     };
-    let size = view.tile_size() * 2.0 * geom::FLATNESS_COEFFICIENT;
+    // println!("image: {:?}", image);
+    let size = view.tile_size() * 2.0 * geom::FLATNESS_COEFFICIENT; // TODO: extract a function
     let mut sprite = Sprite::from_image(image, size);
+    // println!("sprite 1: {:?}", sprite);
     sprite.set_centered(true);
+    // println!("sprite /2: {:?}", sprite);
+    // panic!("xxx");
     sprite.set_pos(screen_pos);
     Ok(action::Show::new(&view.layers().bg, &sprite).boxed())
 }
@@ -372,9 +376,11 @@ pub fn make_action_create_map(state: &State, view: &BattleView) -> ZResult<Box<d
     let mut actions = Vec::new();
     for hex_pos in state.map().iter() {
         actions.push(make_action_show_tile(state, view, hex_pos)?);
+        // /*
         if thread_rng().gen_range(0, 10) < 2 {
             actions.push(make_action_grass(view, hex_pos)?);
         }
+        // */
     }
     Ok(action::Sequence::new(actions).boxed())
 }

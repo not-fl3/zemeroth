@@ -307,7 +307,7 @@ fn visualize_create(
 ) -> ZResult<Box<dyn Action>> {
     // TODO: Move to some .ron config:
     // TODO: At lest, extract this to a separate function
-    let (sprite_name, offset, shadow_size_coefficient) = match prototype {
+    let (sprite_name, /*offset*/ _, shadow_size_coefficient) = match prototype {
         "swordsman" => ("/swordsman.png", 0.2, 1.0),
         "spearman" => ("/spearman.png", 0.2, 1.0),
         "hammerman" => ("/hammerman.png", 0.2, 1.0),
@@ -316,6 +316,7 @@ fn visualize_create(
         "imp_toxic" => ("/imp_toxic.png", 0.2, 1.0),
         "imp_bomber" => ("/imp_bomber.png", 0.2, 1.0),
         "imp_summoner" => ("/imp_summoner.png", 0.2, 1.0),
+        "snake" => ("/snake.png", 0.2, 1.0),
         "boulder" => ("/boulder.png", 0.4, 1.5),
         "bomb_damage" => ("/bomb.png", 0.2, 0.7),
         "bomb_push" => ("/bomb.png", 0.2, 0.7),
@@ -328,7 +329,7 @@ fn visualize_create(
     };
     let point = geom::hex_to_point(view.tile_size(), pos);
     let color_object = [1.0, 1.0, 1.0, 1.0].into();
-    let color_shadow = [0.0, 0.0, 0.0, 0.7].into();
+    let color_shadow = [0.0, 0.0, 0.0, 1.0].into();
     let size = view.tile_size() * 2.0;
     let sprite_object = {
         let mut sprite = Sprite::from_path(context, sprite_name, size)?;
@@ -336,7 +337,8 @@ fn visualize_create(
             a: 0.0,
             ..color_object
         });
-        sprite.set_offset(Vector2::new(0.5, 1.0 - offset));
+        // sprite.set_offset(Vector2::new(0.5, 1.0 - offset));
+        sprite.set_centered(true); // TODO
         sprite.set_pos(point);
         sprite
     };
@@ -375,7 +377,7 @@ fn visualize_event_move_to(
         let from = geom::hex_to_point(view.tile_size(), step.from);
         let to = geom::hex_to_point(view.tile_size(), step.to);
         let diff = to - from;
-        let step_height = 0.025;
+        let step_height = 0.025; // TODO: should be relative to tile_size
         let step_time = time_s(0.13);
         let move_time = time_s(0.3);
         let main_move = action::MoveBy::new(&sprite, diff, move_time).boxed();

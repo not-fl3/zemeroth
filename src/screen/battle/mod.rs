@@ -34,7 +34,6 @@ fn line_height() -> f32 {
     0.08
 }
 
-// TODO: reverse?
 fn build_panel_agent_info(
     context: &mut Context,
     font: &Font,
@@ -179,12 +178,14 @@ fn prepare_map_and_state(
     let mut actions = Vec::new();
     execute::create_terrain(state);
     actions.push(make_action_create_map(state, view)?);
+    // /*
     execute::create_objects(state, &mut |state, event, phase| {
         let action = visualize::visualize(state, view, context, event, phase)
             .expect("Can't visualize the event");
         let action = action::Fork::new(action).boxed();
         actions.push(action);
     });
+    // */
     view.add_action(action::Sequence::new(actions).boxed());
     Ok(())
 }
