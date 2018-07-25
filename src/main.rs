@@ -1,3 +1,5 @@
+#![feature(rust_2018_preview)]
+
 #![windows_subsystem = "windows"]
 #![warn(bare_trait_objects)]
 
