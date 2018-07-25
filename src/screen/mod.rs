@@ -4,7 +4,7 @@ use std::time::Duration;
 use ggez::graphics::{self, Point2};
 use ggez::{self, Context};
 
-use ZResult;
+use crate::ZResult;
 
 mod battle;
 mod camp;

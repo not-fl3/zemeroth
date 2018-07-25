@@ -1,10 +1,10 @@
-use core::ability::Ability;
-use core::command::{self, Command};
-use core::map::{self, Distance, HexMap};
-use core::movement::{self, Path, Pathfinder};
-use core::state;
-use core::utils::shuffle_vec;
-use core::{self, check, ObjId, PlayerId, State};
+use crate::core::ability::Ability;
+use crate::core::command::{self, Command};
+use crate::core::map::{self, Distance, HexMap};
+use crate::core::movement::{self, Path, Pathfinder};
+use crate::core::state;
+use crate::core::utils::shuffle_vec;
+use crate::core::{self, check, ObjId, PlayerId, State};
 
 fn does_agent_have_ability_summon(state: &State, id: ObjId) -> bool {
     if let Some(abilities) = state.parts().abilities.get_opt(id) {

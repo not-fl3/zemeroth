@@ -2,11 +2,11 @@ use std::time::Duration;
 
 use ggez::graphics::{self, Font, Point2, Text};
 use ggez::Context;
-use scene::{Layer, Scene, Sprite};
-use ui::{self, Gui};
+use crate::scene::{Layer, Scene, Sprite};
+use crate::ui::{self, Gui};
 
-use screen::{self, Screen, Transition};
-use ZResult;
+use crate::screen::{self, Screen, Transition};
+use crate::ZResult;
 
 #[derive(Copy, Clone, Debug)]
 enum Message {

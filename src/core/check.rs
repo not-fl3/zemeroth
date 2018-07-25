@@ -1,9 +1,9 @@
-use core::ability::{self, Ability};
-use core::command::{self, Command};
-use core::map::{self, Distance, PosHex};
-use core::state;
-use core::State;
-use core::{self, Attacks, Jokers, Moves, ObjId};
+use crate::core::ability::{self, Ability};
+use crate::core::command::{self, Command};
+use crate::core::map::{self, Distance, PosHex};
+use crate::core::state;
+use crate::core::State;
+use crate::core::{self, Attacks, Jokers, Moves, ObjId};
 
 pub fn check(state: &State, command: &Command) -> Result<(), Error> {
     match *command {

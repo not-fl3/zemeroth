@@ -1,14 +1,14 @@
-use core::ability::PassiveAbility;
-use core::map::{self, PosHex};
-use core::utils;
-use core::{ObjId, PlayerId, TileType};
+use crate::core::ability::PassiveAbility;
+use crate::core::map::{self, PosHex};
+use crate::core::utils;
+use crate::core::{ObjId, PlayerId, TileType};
 
 pub use self::private::State;
 
 mod private {
-    use core::component::{Component, Parts, Prototypes};
-    use core::map::{self, HexMap};
-    use core::{ObjId, PlayerId, TileType};
+    use crate::core::component::{Component, Parts, Prototypes};
+    use crate::core::map::{self, HexMap};
+    use crate::core::{ObjId, PlayerId, TileType};
 
     #[derive(Clone, Debug)]
     pub struct State {
@@ -53,7 +53,7 @@ mod private {
         }
 
         // TODO: make visible only for `apply`
-        pub(in core) fn prototype_for(&self, name: &str) -> Vec<Component> {
+        pub(in crate::core) fn prototype_for(&self, name: &str) -> Vec<Component> {
             let prototypes = &self.prototypes.0;
             prototypes[name].clone()
         }
@@ -62,19 +62,19 @@ mod private {
     /// Mutators. Be carefull with them!
     impl State {
         // TODO: check that it's called only from apply.rs!
-        pub(in core) fn parts_mut(&mut self) -> &mut Parts {
+        pub(in crate::core) fn parts_mut(&mut self) -> &mut Parts {
             &mut self.parts
         }
 
-        pub(in core) fn map_mut(&mut self) -> &mut HexMap<TileType> {
+        pub(in crate::core) fn map_mut(&mut self) -> &mut HexMap<TileType> {
             &mut self.map
         }
 
-        pub(in core) fn set_player_id(&mut self, new_value: PlayerId) {
+        pub(in crate::core) fn set_player_id(&mut self, new_value: PlayerId) {
             self.player_id = new_value;
         }
 
-        pub(in core) fn alloc_id(&mut self) -> ObjId {
+        pub(in crate::core) fn alloc_id(&mut self) -> ObjId {
             self.parts.alloc_id()
         }
     }

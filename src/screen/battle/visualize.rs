@@ -3,18 +3,18 @@ use std::time::Duration;
 use ggez::graphics::{Color, Text, Vector2};
 use ggez::nalgebra;
 use ggez::Context;
-use scene::action;
-use scene::{Action, Boxed, Sprite};
+use crate::scene::action;
+use crate::scene::{Action, Boxed, Sprite};
 
-use core::ability::Ability;
-use core::effect::{self, Effect, LastingEffect, TimedEffect};
-use core::event::{self, ActiveEvent, Event};
-use core::execute::ApplyPhase;
-use core::map::PosHex;
-use core::{ObjId, PlayerId, State};
-use geom;
-use screen::battle::view::BattleView;
-use ZResult;
+use crate::core::ability::Ability;
+use crate::core::effect::{self, Effect, LastingEffect, TimedEffect};
+use crate::core::event::{self, ActiveEvent, Event};
+use crate::core::execute::ApplyPhase;
+use crate::core::map::PosHex;
+use crate::core::{ObjId, PlayerId, State};
+use crate::geom;
+use crate::screen::battle::view::BattleView;
+use crate::ZResult;
 
 // TODO: Move to some other module
 fn time_s(s: f32) -> Duration {

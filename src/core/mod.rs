@@ -1,11 +1,11 @@
 use std::default::Default;
 
-use core::map::PosHex;
-use core::movement::MovePoints;
+use crate::core::map::PosHex;
+use crate::core::movement::MovePoints;
 
-pub use core::check::check;
-pub use core::execute::execute;
-pub use core::state::State;
+pub use crate::core::check::check;
+pub use crate::core::execute::execute;
+pub use crate::core::state::State;
 
 pub mod ability;
 pub mod ai;

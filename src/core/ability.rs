@@ -1,5 +1,5 @@
-use core::map::Distance;
-use core::{Attacks, Strength};
+use crate::core::map::Distance;
+use crate::core::{Attacks, Strength};
 
 /// Active ability.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]

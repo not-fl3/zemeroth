@@ -4,16 +4,16 @@ use std::time::Duration;
 
 use ggez::graphics::{Color, Font, Image, Point2};
 use ggez::Context;
-use scene::action;
-use scene::{Action, Boxed, Layer, Scene, Sprite};
+use crate::scene::action;
+use crate::scene::{Action, Boxed, Layer, Scene, Sprite};
 
-use core::ability::Ability;
-use core::map::{Distance, HexMap, PosHex};
-use core::{self, command, movement};
-use core::{Jokers, Moves, ObjId, State, TileType};
-use geom::{self, hex_to_point};
-use screen::battle::visualize;
-use ZResult;
+use crate::core::ability::Ability;
+use crate::core::map::{Distance, HexMap, PosHex};
+use crate::core::{self, command, movement};
+use crate::core::{Jokers, Moves, ObjId, State, TileType};
+use crate::geom::{self, hex_to_point};
+use crate::screen::battle::visualize;
+use crate::ZResult;
 
 #[derive(Debug, PartialEq)]
 pub enum SelectionMode {

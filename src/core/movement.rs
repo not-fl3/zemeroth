@@ -1,10 +1,10 @@
 use std::collections::VecDeque;
 use std::slice::Windows;
 
-use core::ability::PassiveAbility;
-use core::map::{dirs, Dir, Distance, HexMap, PosHex};
-use core::state;
-use core::{ObjId, State, TileType};
+use crate::core::ability::PassiveAbility;
+use crate::core::map::{dirs, Dir, Distance, HexMap, PosHex};
+use crate::core::state;
+use crate::core::{ObjId, State, TileType};
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MovePoints(pub i32);
