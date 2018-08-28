@@ -1,0 +1,194 @@
+diff --git a/src/core/movement.rs b/src/core/movement.rs
+index 506fb47..02db36a 100644
+--- a/src/core/movement.rs
++++ b/src/core/movement.rs
+@@ -117,6 +117,7 @@ impl<'a> Iterator for Steps<'a> {
+     type Item = Step;
+ 
+     fn next(&mut self) -> Option<Self::Item> {
++        // TODO: use new slice patterns!
+         if let Some(window) = self.windows.next() {
+             let from = window[0];
+             let to = window[1];
+diff --git a/src/screen/main_menu.rs b/src/screen/main_menu.rs
+index 6d7d07b..fc3fb86 100644
+--- a/src/screen/main_menu.rs
++++ b/src/screen/main_menu.rs
+@@ -1,11 +1,15 @@
+ use std::time::Duration;
++use rand::{thread_rng, Rng};
+ 
+ use ggez::graphics::{Font, Point2, Text};
+ use ggez::Context;
+-use scene::{Sprite};
++use ggez::nalgebra;
++use scene::action;
++use scene::{Action, Layer, Scene, Sprite};
+ use ui::{self, Gui};
+ 
+ use screen::{self, Screen, Transition};
++use visualize;
+ use ZResult;
+ 
+ #[derive(Copy, Clone, Debug)]
+@@ -17,13 +21,12 @@ enum Message {
+ 
+ fn make_gui(context: &mut Context, font: &Font) -> ZResult<ui::Gui<Message>> {
+     let mut gui = ui::Gui::new(context);
+-    let image_battle = Text::new(context, "[battle]", font)?.into_inner();
+-    let image_campaign = Text::new(context, "[campaign]", font)?.into_inner();
+-    let image_exit = Text::new(context, "[exit]", font)?.into_inner();
+-    let button_battle = ui::Button::new(image_battle, 0.2, gui.sender(), Message::StartInstant);
+-    let button_campaign =
+-        ui::Button::new(image_campaign, 0.2, gui.sender(), Message::StartCampaign);
+-    let button_exit = ui::Button::new(image_exit, 0.2, gui.sender(), Message::Exit);
++    let i_battle = Text::new(context, "[battle]", font)?.into_inner();
++    let i_campaign = Text::new(context, "[campaign]", font)?.into_inner();
++    let i_exit = Text::new(context, "[exit]", font)?.into_inner();
++    let button_battle = ui::Button::new(i_battle, 0.2, gui.sender(), Message::StartInstant);
++    let button_campaign = ui::Button::new(i_campaign, 0.2, gui.sender(), Message::StartCampaign);
++    let button_exit = ui::Button::new(i_exit, 0.2, gui.sender(), Message::Exit);
+     let mut layout = ui::VLayout::new();
+     layout.add(Box::new(button_battle));
+     layout.add(Box::new(button_campaign));
+@@ -33,33 +36,84 @@ fn make_gui(context: &mut Context, font: &Font) -> ZResult<ui::Gui<Message>> {
+     Ok(gui)
+ }
+ 
++#[derive(Debug, Clone, Default)]
++pub struct Layers {
++    pub units: Layer,
++}
++
++impl Layers {
++    fn sorted(self) -> Vec<Layer> {
++        vec![self.units]
++    }
++}
++
+ #[derive(Debug)]
+ pub struct MainMenu {
+     gui: Gui<Message>,
++    layers: Layers,
++    scene: Scene,
+ }
+ 
+ impl MainMenu {
+     pub fn new(context: &mut Context) -> ZResult<Self> {
+         let font = Font::new(context, "/OpenSans-Regular.ttf", 32)?;
+         let gui = make_gui(context, &font)?;
++        let layers = Layers::default();
++        let scene = Scene::new(layers.clone().sorted());
++        let mut this = Self { gui, scene, layers };
++        this.demo_move(context)?;
++        Ok(this)
++    }
+ 
+-        let mut sprite = Sprite::from_path(context, "/tile.png", 0.1)?;
++    fn demo_move(&mut self, context: &mut Context) -> ZResult {
++        let mut sprite = Sprite::from_path(context, "/imp.png", 0.2)?;
+         sprite.set_centered(true);
+-        sprite.set_pos(Point2::new(0.5, 0.5));
+-
+-        // TODO: create some random unit arc-moving animation
+-        Ok(Self {
+-            gui,
+-        })
++        // sprite.set_pos(Point2::new(0.5, 0.5));
++        let layer = &self.layers.units;
++        // let time = Duration::from_millis(500);
++        // let height = 0.1;
++        let height = 0.1;
++        let mut actions: Vec<Box<Action>> = Vec::new();
++        actions.push(Box::new(action::Show::new(layer, &sprite)));
++        let mut points = Vec::new();
++        for _ in 0..20 {
++            let n = 0.4;
++            let x = thread_rng().gen_range(-n, n);
++            let y = thread_rng().gen_range(-n, n);
++            points.push(Point2::new(x, y));
++        }
++        for step in points.windows(2) {
++            let from = step[0];
++            let to = step[1];
++            let distance = nalgebra::distance(&from, &to);
++            let diff = to - from;
++            // let step_time = Duration::from_millis(140);
++            let step_time = Duration::from_millis((2_000_f32 * distance) as _);
++            let main_move = Box::new(action::MoveBy::new(
++                &sprite,
++                Point2::origin() + diff, // TODO: ugly hack
++                step_time,
++            ));
++            actions.push(Box::new(action::Fork::new(main_move)));
++            // actions.push(main_move);
++            // actions.push(visualize::up_and_down_move(&sprite, height, time));
++            actions.push(visualize::up_and_down_move(&sprite, height, step_time / 2));
++            actions.push(visualize::up_and_down_move(&sprite, height, step_time / 2));
++        }
++        let action_sequence = Box::new(action::Sequence::new(actions));
++        self.scene.add_action(action_sequence);
++        Ok(())
+     }
+ }
+ 
+ impl Screen for MainMenu {
+-    fn update(&mut self, _context: &mut Context, _: Duration) -> ZResult<Transition> {
++    fn update(&mut self, _context: &mut Context, dtime: Duration) -> ZResult<Transition> {
++        self.scene.tick(dtime);
+         Ok(Transition::None)
+     }
+ 
+     fn draw(&self, context: &mut Context) -> ZResult {
++        self.scene.draw(context)?;
+         self.gui.draw(context)
+     }
+ 
+diff --git a/src/visualize.rs b/src/visualize.rs
+index b2db8dc..513a8bf 100644
+--- a/src/visualize.rs
++++ b/src/visualize.rs
+@@ -111,12 +111,7 @@ fn show_flare(
+     show_flare_scale(view, context, at, color, scale)
+ }
+ 
+-fn up_and_down_move(
+-    _: &mut BattleView,
+-    sprite: &Sprite,
+-    height: f32,
+-    time: Duration,
+-) -> Box<Action> {
++pub fn up_and_down_move(sprite: &Sprite, height: f32, time: Duration) -> Box<Action> {
+     let duration_0_25 = time / 4;
+     let up_fast = Point2::new(0.0, -height * 0.75);
+     let up_slow = Point2::new(0.0, -height * 0.25);
+@@ -139,7 +134,7 @@ fn arc_move(view: &mut BattleView, sprite: &Sprite, diff: Point2) -> Box<Action>
+     let base_time = 0.3;
+     let height = min_height + base_height * (len / 1.0);
+     let time = time_s(min_time + base_time * (len / 1.0));
+-    let up_and_down = up_and_down_move(view, sprite, height, time);
++    let up_and_down = up_and_down_move(sprite, height, time);
+     let main_move = Box::new(action::MoveBy::new(sprite, diff, time));
+     Box::new(action::Sequence::new(vec![
+         Box::new(action::Fork::new(main_move)),
+@@ -374,6 +369,9 @@ fn visualize_event_move_to(
+         let diff = to - from;
+         let step_height = 0.025;
+         let step_time = time_s(0.13);
++
++        // TODO: extract this:
++
+         let main_move = Box::new(action::MoveBy::new(
+             &sprite,
+             Point2::origin() + diff, // TODO: ugly hack
+@@ -381,8 +379,8 @@ fn visualize_event_move_to(
+         ));
+         let action = Box::new(action::Sequence::new(vec![
+             Box::new(action::Fork::new(main_move)),
+-            up_and_down_move(view, &sprite, step_height, step_time),
+-            up_and_down_move(view, &sprite, step_height, step_time),
++            up_and_down_move(&sprite, step_height, step_time),
++            up_and_down_move(&sprite, step_height, step_time),
+         ]));
+         actions.push(action);
+     }

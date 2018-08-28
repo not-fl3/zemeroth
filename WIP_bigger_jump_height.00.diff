@@ -1,0 +1,13 @@
+diff --git a/src/screen/battle/visualize.rs b/src/screen/battle/visualize.rs
+index 855c586..42471bc 100644
+--- a/src/screen/battle/visualize.rs
++++ b/src/screen/battle/visualize.rs
+@@ -375,7 +375,7 @@ fn visualize_event_move_to(
+         let from = geom::hex_to_point(view.tile_size(), step.from);
+         let to = geom::hex_to_point(view.tile_size(), step.to);
+         let diff = to - from;
+-        let step_height = 0.025;
++        let step_height = 0.04; // TODO: depend on tile_size?
+         let step_time = time_s(0.13);
+         let move_time = time_s(0.3);
+         let main_move = action::MoveBy::new(&sprite, diff, move_time).boxed();

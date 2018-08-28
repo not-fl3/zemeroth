@@ -1,0 +1,167 @@
+diff --git a/ggwp-zgui/src/lib.rs b/ggwp-zgui/src/lib.rs
+index abd0f49..e77aca4 100644
+--- a/ggwp-zgui/src/lib.rs
++++ b/ggwp-zgui/src/lib.rs
+@@ -1,4 +1,7 @@
+ #![warn(bare_trait_objects)]
++#![cfg_attr(feature = "cargo-clippy", deny(clippy_pedantic))]
++#![cfg_attr(feature = "cargo-clippy", allow(cast_possible_truncation))]
++#![cfg_attr(feature = "cargo-clippy", allow(cast_precision_loss))]
+ 
+ /// Tiny and opinionated GUI
+ ///
+@@ -35,7 +38,7 @@ impl Sprite {
+         let param = graphics::DrawParam {
+             scale: Point2::new(basic_scale, basic_scale),
+             color: Some([0.0, 0.0, 0.0, 1.0].into()),
+-            ..Default::default()
++            ..graphics::DrawParam::default()
+         };
+         Self {
+             image,
+diff --git a/ggwp-zscene/src/lib.rs b/ggwp-zscene/src/lib.rs
+index cc5f374..0f6198d 100644
+--- a/ggwp-zscene/src/lib.rs
++++ b/ggwp-zscene/src/lib.rs
+@@ -1,4 +1,7 @@
+ #![warn(bare_trait_objects)]
++#![cfg_attr(feature = "cargo-clippy", deny(clippy_pedantic))]
++#![cfg_attr(feature = "cargo-clippy", allow(cast_possible_truncation))]
++#![cfg_attr(feature = "cargo-clippy", allow(cast_precision_loss))]
+ 
+ extern crate ggez;
+ 
+diff --git a/ggwp-zscene/src/sprite.rs b/ggwp-zscene/src/sprite.rs
+index 879fb1d..a3a5f36 100644
+--- a/ggwp-zscene/src/sprite.rs
++++ b/ggwp-zscene/src/sprite.rs
+@@ -23,7 +23,7 @@ impl Sprite {
+         let basic_scale = height / image.height() as f32;
+         let param = graphics::DrawParam {
+             scale: Point2::new(basic_scale, basic_scale),
+-            ..Default::default()
++            ..graphics::DrawParam::default()
+         };
+         let data = SpriteData {
+             image,
+diff --git a/src/core/map.rs b/src/core/map.rs
+index a6dfa24..e8d1a07 100644
+--- a/src/core/map.rs
++++ b/src/core/map.rs
+@@ -263,7 +263,7 @@ impl Dir {
+         }
+     }
+ 
+-    pub fn get_dir_from_to(from: PosHex, to: PosHex) -> Dir {
++    pub fn get_dir_from_to(from: PosHex, to: PosHex) -> Self {
+         assert_eq!(distance_hex(from, to), Distance(1));
+         let diff = [to.q - from.q, to.r - from.r];
+         for dir in dirs() {
+@@ -274,7 +274,7 @@ impl Dir {
+         panic!("impossible positions: {:?}, {:?}", from, to); // TODO: implement Display for PosHex
+     }
+ 
+-    pub fn get_neighbor_pos(pos: PosHex, dir: Dir) -> PosHex {
++    pub fn get_neighbor_pos(pos: PosHex, dir: Self) -> PosHex {
+         let diff = DIR_TO_POS_DIFF[dir.to_int() as usize];
+         PosHex {
+             q: pos.q + diff[0],
+diff --git a/src/core/movement.rs b/src/core/movement.rs
+index 0a4d7c9..2a23256 100644
+--- a/src/core/movement.rs
++++ b/src/core/movement.rs
+@@ -83,7 +83,7 @@ impl Path {
+         *self.tiles().last().unwrap()
+     }
+ 
+-    pub fn truncate(&self, state: &State, id: ObjId) -> Option<Path> {
++    pub fn truncate(&self, state: &State, id: ObjId) -> Option<Self> {
+         let agent = state.parts().agent.get(id);
+         let mut new_path = Vec::new();
+         let mut cost = MovePoints(0);
+@@ -97,7 +97,7 @@ impl Path {
+             new_path.push(to);
+         }
+         if new_path.len() >= 2 {
+-            Some(Path::new(new_path))
++            Some(Self::new(new_path))
+         } else {
+             None
+         }
+@@ -151,8 +151,8 @@ pub struct Pathfinder {
+ }
+ 
+ impl Pathfinder {
+-    pub fn new(map_radius: Distance) -> Pathfinder {
+-        Pathfinder {
++    pub fn new(map_radius: Distance) -> Self {
++        Self {
+             queue: VecDeque::new(),
+             map: HexMap::new(map_radius),
+         }
+diff --git a/src/main.rs b/src/main.rs
+index cf354c5..6f3f551 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,5 +1,11 @@
+ #![windows_subsystem = "windows"]
+ #![warn(bare_trait_objects)]
++#![cfg_attr(feature = "cargo-clippy", deny(clippy_pedantic))]
++#![cfg_attr(feature = "cargo-clippy", allow(similar_names))]
++#![cfg_attr(feature = "cargo-clippy", allow(stutter))]
++#![cfg_attr(feature = "cargo-clippy", allow(cast_precision_loss))]
++#![cfg_attr(feature = "cargo-clippy", allow(cast_possible_truncation))]
++#![cfg_attr(feature = "cargo-clippy", allow(cast_sign_loss))]
+ 
+ #[macro_use]
+ extern crate log;
+@@ -46,10 +52,10 @@ struct MainState {
+ }
+ 
+ impl MainState {
+-    fn new(context: &mut Context) -> ZResult<MainState> {
++    fn new(context: &mut Context) -> ZResult<Self> {
+         let start_screen = Box::new(screen::MainMenu::new(context)?);
+         let screens = screen::Screens::new(start_screen);
+-        let mut this = MainState { screens };
++        let mut this = Self { screens };
+         {
+             let (w, h) = graphics::get_drawable_size(context);
+             this.resize(context, w, h);
+diff --git a/src/screen/battle/visualize.rs b/src/screen/battle/visualize.rs
+index e2a3d47..7432efa 100644
+--- a/src/screen/battle/visualize.rs
++++ b/src/screen/battle/visualize.rs
+@@ -513,10 +513,10 @@ fn visualize_event_use_ability(
+     let action_main = match event.ability {
+         Ability::Jump(_) => visualize_event_use_ability_jump(state, view, context, event)?,
+         Ability::Dash => visualize_event_use_ability_dash(state, view, context, event)?,
+-        Ability::ExplodePush => visualize_event_use_ability_explode(state, view, event)?,
+-        Ability::ExplodeDamage => visualize_event_use_ability_explode(state, view, event)?,
+-        Ability::ExplodeFire => visualize_event_use_ability_explode(state, view, event)?,
+-        Ability::ExplodePoison => visualize_event_use_ability_explode(state, view, event)?,
++        Ability::ExplodePush
++        | Ability::ExplodeDamage
++        | Ability::ExplodeFire
++        | Ability::ExplodePoison => visualize_event_use_ability_explode(state, view, event)?,
+         Ability::Summon(_) => visualize_event_use_ability_summon(state, view, event)?,
+         _ => action::Empty::new().boxed(),
+     };
+diff --git a/zcomponents/src/lib.rs b/zcomponents/src/lib.rs
+index a196942..ff89bb3 100644
+--- a/zcomponents/src/lib.rs
++++ b/zcomponents/src/lib.rs
+@@ -1,4 +1,4 @@
+-//! # ZComponents - a stupid component storage
++//! # `ZComponents` - a stupid component storage
+ //!
+ //! I find "serious" ECS to be an overkill for turn-based game logic,
+ //! so I've created this simple library that does only one thing:
+@@ -89,6 +89,7 @@
+ //! ```
+ 
+ #![warn(bare_trait_objects)]
++#![cfg_attr(feature = "cargo-clippy", deny(clippy_pedantic))]
+ 
+ use std::collections::{hash_map, HashMap};
+ use std::default::Default;

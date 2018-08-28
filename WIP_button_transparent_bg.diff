@@ -1,0 +1,13 @@
+diff --git a/ggwp-zgui/src/lib.rs b/ggwp-zgui/src/lib.rs
+index ea4abe0..9a13ee9 100644
+--- a/ggwp-zgui/src/lib.rs
++++ b/ggwp-zgui/src/lib.rs
+@@ -241,6 +241,8 @@ impl<Message: Clone> Button<Message> {
+ 
+ impl<Message: Clone + Debug> Widget for Button<Message> {
+     fn draw(&self, context: &mut Context) -> GameResult<()> {
++        let r = self.sprite.rect();
++        graphics::rectangle(context, graphics::DrawMode::Fill, r)?;
+         self.sprite.draw(context)
+     }
+ 

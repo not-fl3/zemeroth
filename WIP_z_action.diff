@@ -1,0 +1,26 @@
+diff --git a/src/visualize.rs b/src/visualize.rs
+index ac3bb62..cca6b10 100644
+--- a/src/visualize.rs
++++ b/src/visualize.rs
+@@ -15,6 +15,21 @@ use core::ability::Ability;
+ use game_view::GameView;
+ use map;
+ 
++/*
++struct Message {
++    pos: PosHex,
++    msg: String,
++}
++
++enum ZAction {
++    Raw(Box<Action>),
++    Message(Message),
++}
++
++// TODO: nested z-actions?
++*/
++
++// TODO: rewrite to generate enums
+ pub fn message(view: &mut GameView, context: &mut Context, pos: PosHex, text: &str) -> Box<Action> {
+     let visible = [0.0, 0.0, 0.0, 1.0];
+     let invisible = [0.0, 0.0, 0.0, 0.0];

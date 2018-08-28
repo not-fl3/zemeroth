@@ -1,0 +1,137 @@
+diff --git a/ggwp-zscene/examples/action.rs b/ggwp-zscene/examples/action.rs
+index 7059c17..a29fe86 100644
+--- a/ggwp-zscene/examples/action.rs
++++ b/ggwp-zscene/examples/action.rs
+@@ -49,12 +49,16 @@ impl State {
+ 
+     fn demo_move(&mut self, context: &mut Context) -> GameResult<()> {
+         let mut sprite = Sprite::from_path(context, "/fire.png", 0.5)?;
++        sprite.set_offset(Vector2::new(0.5, 0.5));
+         sprite.set_pos(Point2::new(0.0, -1.0));
+         let delta = Vector2::new(0.0, 1.5);
+-        let move_duration = Duration::from_millis(2_000);
++        let duration_move = Duration::from_millis(2_000);
++        let duration_scale = Duration::from_millis(1_000);
+         let action = action::Sequence::new(vec![
+             action::Show::new(&self.layers.fg, &sprite).boxed(),
+-            action::MoveBy::new(&sprite, delta, move_duration).boxed(),
++            action::MoveBy::new(&sprite, delta, duration_move).boxed(),
++            action::ScaleTo::new(&sprite, Point2::new(0.5, 0.5), duration_scale).boxed(),
++            action::ScaleTo::new(&sprite, Point2::new(-1.0, 1.0), duration_scale).boxed(),
+         ]);
+         self.scene.add_action(action.boxed());
+         Ok(())
+@@ -65,9 +69,10 @@ impl State {
+             let image = Text::new(context, "some text", &self.font)?.into_inner();
+             let mut sprite = Sprite::from_image(image, 0.1);
+             sprite.set_pos(Point2::new(0.0, 0.0));
+-            sprite.set_scale(2.0); // just testing set_size method
++            sprite.set_scale_h(2.0); // just testing set_size method
+             let scale = sprite.scale();
+-            assert!((scale - 2.0).abs() < 0.001);
++            assert!((scale.y - 2.0).abs() < 0.001);
++            assert!((scale.x - 2.0).abs() < 0.001);
+             sprite
+         };
+         let visible = [0.0, 1.0, 0.0, 1.0].into();
+diff --git a/ggwp-zscene/src/action/mod.rs b/ggwp-zscene/src/action/mod.rs
+index c2cadcc..36a7f51 100644
+--- a/ggwp-zscene/src/action/mod.rs
++++ b/ggwp-zscene/src/action/mod.rs
+@@ -10,6 +10,7 @@ pub use action::sequence::Sequence;
+ pub use action::set_color::SetColor;
+ pub use action::show::Show;
+ pub use action::sleep::Sleep;
++pub use action::scale_to::ScaleTo;
+ 
+ mod change_color_to;
+ mod empty;
+@@ -20,6 +21,7 @@ mod sequence;
+ mod set_color;
+ mod show;
+ mod sleep;
++mod scale_to;
+ 
+ pub trait Action: Debug {
+     fn begin(&mut self) {}
+diff --git a/ggwp-zscene/src/sprite.rs b/ggwp-zscene/src/sprite.rs
+index 879fb1d..1e56113 100644
+--- a/ggwp-zscene/src/sprite.rs
++++ b/ggwp-zscene/src/sprite.rs
+@@ -98,9 +98,9 @@ impl Sprite {
+         self.color_opt().unwrap()
+     }
+ 
+-    pub fn scale(&self) -> f32 {
++    pub fn scale(&self) -> Point2 {
+         let data = self.data.borrow();
+-        data.param.scale.x / data.basic_scale
++        data.param.scale / data.basic_scale
+     }
+ 
+     pub fn set_pos(&mut self, pos: Point2) {
+@@ -112,13 +112,21 @@ impl Sprite {
+         self.data.borrow_mut().param.color = Some(color);
+     }
+ 
+-    pub fn set_scale(&mut self, scale: f32) {
++    pub fn set_scale_h(&mut self, scale: f32) {
++        // TODO: call set_scale
+         let mut data = self.data.borrow_mut();
+         let s = data.basic_scale * scale;
+         let scale = Point2::new(s, s);
+         data.param.scale = scale;
+     }
+ 
++    pub fn set_scale(&mut self, scale: Point2) {
++        let mut data = self.data.borrow_mut();
++        // let s = scale * data.basic_scale;
++        // let scale = Point2::new(s, s);
++        data.param.scale = scale * data.basic_scale;
++    }
++
+     // TODO: unittest this?
+     pub fn is_same(&self, other: &Self) -> bool {
+         Rc::ptr_eq(&self.data, &other.data)
+diff --git a/src/core/execute.rs b/src/core/execute.rs
+index ed63418..1826232 100644
+--- a/src/core/execute.rs
++++ b/src/core/execute.rs
+@@ -1063,6 +1063,7 @@ pub fn create_objects(state: &mut State, cb: Cb) {
+         (Some(PlayerId(0)), "hammerman", 1),
+         (Some(PlayerId(0)), "spearman", 1),
+         (Some(PlayerId(0)), "alchemist", 1),
++        (Some(PlayerId(1)), "snake", 2),
+         (Some(PlayerId(1)), "imp", 3),
+         (Some(PlayerId(1)), "imp_toxic", 1),
+         (Some(PlayerId(1)), "imp_bomber", 2),
+diff --git a/src/screen/battle/visualize.rs b/src/screen/battle/visualize.rs
+index 470d3de..25f28da 100644
+--- a/src/screen/battle/visualize.rs
++++ b/src/screen/battle/visualize.rs
+@@ -316,6 +316,7 @@ fn visualize_create(
+         "imp_toxic" => ("/imp_toxic.png", 0.2, 1.0),
+         "imp_bomber" => ("/imp_bomber.png", 0.2, 1.0),
+         "imp_summoner" => ("/imp_summoner.png", 0.2, 1.0),
++        "snake" => ("/snake.png", 0.2, 1.0),
+         "boulder" => ("/boulder.png", 0.4, 1.5),
+         "bomb_damage" => ("/bomb.png", 0.2, 0.7),
+         "bomb_push" => ("/bomb.png", 0.2, 0.7),
+@@ -328,7 +329,7 @@ fn visualize_create(
+     };
+     let point = geom::hex_to_point(view.tile_size(), pos);
+     let color_object = [1.0, 1.0, 1.0, 1.0].into();
+-    let color_shadow = [0.0, 0.0, 0.0, 0.7].into();
++    let color_shadow = [0.0, 0.0, 0.0, 1.0].into();
+     let size = view.tile_size() * 2.0;
+     let sprite_object = {
+         let mut sprite = Sprite::from_path(context, sprite_name, size)?;
+@@ -375,7 +376,7 @@ fn visualize_event_move_to(
+         let from = geom::hex_to_point(view.tile_size(), step.from);
+         let to = geom::hex_to_point(view.tile_size(), step.to);
+         let diff = to - from;
+-        let step_height = 0.025;
++        let step_height = 0.025; // TODO: should be relative to tile_size
+         let step_time = time_s(0.13);
+         let move_time = time_s(0.3);
+         let main_move = action::MoveBy::new(&sprite, diff, move_time).boxed();
