@@ -12,6 +12,7 @@ addons:
 cache:
   directories:
   - /home/travis/.cargo
+  - /home/travis/SDL2-2.0.5 
 
 rust:
   - nightly
