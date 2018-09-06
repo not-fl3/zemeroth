@@ -1,6 +1,8 @@
 #![windows_subsystem = "windows"]
 #![warn(bare_trait_objects)]
 
+// test 1
+
 #[macro_use]
 extern crate log;
 
