@@ -40,7 +40,7 @@ before_install:
   - if [ "${TRAVIS_OS_NAME}" = "windows" ]; then
         curl https://www.libsdl.org/release/SDL2-devel-2.0.5-VC.zip
         && ls
-        && 7z x SDL2-devel-2.0.5-VC.zip
+        && 7z x SDL2-devel-2.0.5-VC.zip > /dev/null
         && ls;
     fi
 
