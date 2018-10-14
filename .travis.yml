@@ -42,7 +42,7 @@ before_install:
         && ls
         && 7z x SDL2-devel-2.0.5-VC.zip
         && ls
-        && cp SDL2-2.0.5\lib\x64\* .
+        && cp SDL2-2.0.5/lib/x64/* .
         && ls;
     fi
 
