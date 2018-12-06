@@ -63,7 +63,8 @@ impl Sprite {
         dimensions.scale(data.param.scale.x, data.param.scale.y);
         data.offset.x = -dimensions.w * offset.x;
         data.offset.y = -dimensions.h * offset.y;
-        data.param.dest += data.offset - old_offset;
+        let offset = data.offset;
+        data.param.dest += offset - old_offset;
     }
 
     pub fn draw(&self, context: &mut Context) -> GameResult<()> {

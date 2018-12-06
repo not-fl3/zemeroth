@@ -10,8 +10,8 @@ use ggez::{Context, GameResult};
 
 // TODO: z-order? (https://github.com/ozkriff/zemeroth/issues/319)
 
-pub use action::{Action, Boxed};
-pub use sprite::Sprite;
+pub use crate::action::{Action, Boxed};
+pub use crate::sprite::Sprite;
 
 pub mod action;
 

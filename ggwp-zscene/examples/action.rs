@@ -7,8 +7,8 @@ use ggez::conf;
 use ggez::event;
 use ggez::graphics::{self, Font, Point2, Rect, Text, Vector2};
 use ggez::{Context, ContextBuilder, GameResult};
-use scene::action;
-use scene::{Boxed, Layer, Scene, Sprite};
+use crate::scene::action;
+use crate::scene::{Boxed, Layer, Scene, Sprite};
 
 #[derive(Debug, Clone, Default)]
 pub struct Layers {
