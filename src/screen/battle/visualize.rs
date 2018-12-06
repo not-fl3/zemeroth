@@ -5,20 +5,20 @@ use ggez::{
     nalgebra, Context,
 };
 use rand::{thread_rng, Rng};
-use scene::{action, Action, Boxed, Sprite};
+use crate::scene::{action, Action, Boxed, Sprite};
 
-use core::map::PosHex;
-use core::tactical_map::{
+use crate::core::map::PosHex;
+use crate::core::tactical_map::{
     ability::Ability,
     effect::{self, Effect},
     event::{self, ActiveEvent, Event},
     execute::{hit_chance, ApplyPhase},
     state, ObjId, PlayerId, State,
 };
-use geom;
-use screen::battle::view::BattleView;
-use utils::time_s;
-use ZResult;
+use crate::geom;
+use crate::screen::battle::view::BattleView;
+use crate::utils::time_s;
+use crate::ZResult;
 
 fn seq(actions: Vec<Box<dyn Action>>) -> Box<dyn Action> {
     action::Sequence::new(actions).boxed()

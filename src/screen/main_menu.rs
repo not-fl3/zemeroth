@@ -7,13 +7,13 @@ use ggez::{
     graphics::{Font, Point2, Text},
     Context,
 };
-use scene::Sprite;
-use ui::{self, Gui};
+use crate::scene::Sprite;
+use crate::ui::{self, Gui};
 
-use core::tactical_map::state;
-use screen::{self, Screen, Transition};
-use utils;
-use ZResult;
+use crate::core::tactical_map::state;
+use crate::screen::{self, Screen, Transition};
+use crate::utils;
+use crate::ZResult;
 
 #[derive(Copy, Clone, Debug)]
 enum Message {

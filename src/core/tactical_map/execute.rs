@@ -2,8 +2,8 @@ use std::collections::HashMap;
 
 use rand::{thread_rng, Rng};
 
-use core::map::{self, Dir, PosHex};
-use core::tactical_map::{
+use crate::core::map::{self, Dir, PosHex};
+use crate::core::tactical_map::{
     self,
     ability::{self, Ability, PassiveAbility},
     apply::apply,
@@ -1158,7 +1158,7 @@ fn choose_who_to_summon(state: &State) -> String {
 mod tests {
     use std::collections::HashMap;
 
-    use core::tactical_map::{effect::Effect, ObjId};
+    use crate::core::tactical_map::{effect::Effect, ObjId};
 
     use super::ExecuteContext;
 

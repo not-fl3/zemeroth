@@ -312,7 +312,7 @@ impl Iterator for DirIter {
 
 #[cfg(test)]
 mod tests {
-    use core::map::{Distance, HexMap};
+    use crate::core::map::{Distance, HexMap};
 
     #[test]
     fn test_map_height() {

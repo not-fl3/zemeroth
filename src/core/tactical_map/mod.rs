@@ -1,8 +1,8 @@
 use std::default::Default;
 
-use core::{map::PosHex, tactical_map::movement::MovePoints};
+use crate::core::{map::PosHex, tactical_map::movement::MovePoints};
 
-pub use core::tactical_map::{check::check, execute::execute, state::State};
+pub use crate::core::tactical_map::{check::check, execute::execute, state::State};
 
 pub mod ability;
 pub mod ai;

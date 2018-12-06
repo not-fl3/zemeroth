@@ -4,11 +4,11 @@ use ggez::{
     graphics::{self, Font, Point2, Text},
     Context,
 };
-use scene::{action, Action, Boxed};
-use ui::{self, Gui};
+use crate::scene::{action, Action, Boxed};
+use crate::ui::{self, Gui};
 
-use core::map::PosHex;
-use core::tactical_map::{
+use crate::core::map::PosHex;
+use crate::core::tactical_map::{
     self, ability,
     ability::Ability,
     ai::Ai,
@@ -20,13 +20,13 @@ use core::tactical_map::{
     state::{self, BattleResult},
     ObjId, PlayerId, State,
 };
-use geom;
-use screen::{
+use crate::geom;
+use crate::screen::{
     battle::view::{make_action_create_map, BattleView, SelectionMode},
     Screen, Transition,
 };
-use utils::{self, time_s};
-use ZResult;
+use crate::utils::{self, time_s};
+use crate::ZResult;
 
 mod view;
 mod visualize;

@@ -5,17 +5,17 @@ use ggez::{
     Context,
 };
 use rand::{thread_rng, Rng};
-use scene::{action, Action, Boxed, Layer, Scene, Sprite};
+use crate::scene::{action, Action, Boxed, Layer, Scene, Sprite};
 
-use core::map::{self, Distance, HexMap, PosHex};
-use core::tactical_map::{
+use crate::core::map::{self, Distance, HexMap, PosHex};
+use crate::core::tactical_map::{
     self, ability::Ability, command, execute::hit_chance, movement, Jokers, Moves, ObjId, State,
     TileType,
 };
-use geom::{self, hex_to_point};
-use screen::battle::visualize;
-use utils::time_s;
-use ZResult;
+use crate::geom::{self, hex_to_point};
+use crate::screen::battle::visualize;
+use crate::utils::time_s;
+use crate::ZResult;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SelectionMode {

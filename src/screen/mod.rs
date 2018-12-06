@@ -6,7 +6,7 @@ use ggez::{
     Context,
 };
 
-use ZResult;
+use crate::ZResult;
 
 mod battle;
 mod campaign;

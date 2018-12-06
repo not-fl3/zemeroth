@@ -1,7 +1,7 @@
 use ron;
 
-use core::map;
-use core::tactical_map::{
+use crate::core::map;
+use crate::core::tactical_map::{
     self,
     ability::{Ability, PassiveAbility, RechargeableAbility},
     effect::Timed,

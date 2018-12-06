@@ -1,7 +1,7 @@
 use rand::{thread_rng, Rng};
 
-use core::map::{self, PosHex};
-use core::tactical_map::{
+use crate::core::map::{self, PosHex};
+use crate::core::tactical_map::{
     state::{self, State},
     PlayerId,
 };

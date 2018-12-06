@@ -1,7 +1,7 @@
 use std::{collections::VecDeque, slice::Windows};
 
-use core::map::{dirs, Dir, Distance, HexMap, PosHex};
-use core::tactical_map::{ability::PassiveAbility, state, ObjId, State, TileType};
+use crate::core::map::{dirs, Dir, Distance, HexMap, PosHex};
+use crate::core::tactical_map::{ability::PassiveAbility, state, ObjId, State, TileType};
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MovePoints(pub i32);
@@ -243,7 +243,7 @@ impl Pathfinder {
 
 #[cfg(test)]
 mod tests {
-    use core::tactical_map::{
+    use crate::core::tactical_map::{
         movement::{Path, Step},
         PosHex,
     };

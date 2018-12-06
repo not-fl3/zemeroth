@@ -1,5 +1,5 @@
-use core::map::{self, Distance, PosHex};
-use core::tactical_map::{
+use crate::core::map::{self, Distance, PosHex};
+use crate::core::tactical_map::{
     self,
     ability::{self, Ability},
     command::{self, Command},

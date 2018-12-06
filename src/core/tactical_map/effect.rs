@@ -1,4 +1,4 @@
-use core::tactical_map::{component::Component, Phase, PosHex, Strength};
+use crate::core::tactical_map::{component::Component, Phase, PosHex, Strength};
 
 #[derive(Clone, Debug, Copy, PartialEq, Serialize, Deserialize)]
 pub enum Duration {

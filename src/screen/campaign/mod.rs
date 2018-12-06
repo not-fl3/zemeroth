@@ -7,15 +7,15 @@ use ggez::{
     graphics::{self, Font, Point2, Text},
     Context,
 };
-use ui::{self, Gui};
+use crate::ui::{self, Gui};
 
-use core::{
+use crate::core::{
     campaign::{Mode, State},
     tactical_map::{scenario, state::BattleResult, PlayerId},
 };
-use screen::{self, Screen, Transition};
-use utils;
-use ZResult;
+use crate::screen::{self, Screen, Transition};
+use crate::utils;
+use crate::ZResult;
 
 #[derive(Clone, Debug)]
 enum Message {
