@@ -1,11 +1,11 @@
 use std::{path::Path, sync::mpsc::Sender, time::Duration};
 
+use crate::scene::{action, Action, Boxed};
+use crate::ui::{self, Gui};
 use ggez::{
     graphics::{self, Font, Point2, Text},
     Context,
 };
-use crate::scene::{action, Action, Boxed};
-use crate::ui::{self, Gui};
 
 use crate::core::map::PosHex;
 use crate::core::tactical_map::{

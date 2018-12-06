@@ -1,7 +1,7 @@
+use crate::{Action, Sprite};
 use ggez::graphics::Color;
 use ggez::timer;
 use std::time::Duration;
-use crate::{Action, Sprite};
 
 #[derive(Debug)]
 pub struct ChangeColorTo {

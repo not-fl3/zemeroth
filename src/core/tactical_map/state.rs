@@ -1,5 +1,7 @@
 use crate::core::map::{self, PosHex};
-use crate::core::tactical_map::{ability::PassiveAbility, utils, ObjId, PlayerId, Strength, TileType};
+use crate::core::tactical_map::{
+    ability::PassiveAbility, utils, ObjId, PlayerId, Strength, TileType,
+};
 
 pub use self::private::{BattleResult, State};
 

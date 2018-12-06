@@ -1,11 +1,11 @@
 use std::time::Duration;
 
+use crate::scene::{action, Action, Boxed, Sprite};
 use ggez::{
     graphics::{Color, Point2, Text, Vector2},
     nalgebra, Context,
 };
 use rand::{thread_rng, Rng};
-use crate::scene::{action, Action, Boxed, Sprite};
 
 use crate::core::map::PosHex;
 use crate::core::tactical_map::{

@@ -3,17 +3,18 @@ use std::{
     time::Duration,
 };
 
+use crate::scene::Sprite;
+use crate::ui::{self, Gui};
 use ggez::{
     graphics::{Font, Point2, Text},
     Context,
 };
-use crate::scene::Sprite;
-use crate::ui::{self, Gui};
 
-use crate::core::tactical_map::state;
-use crate::screen::{self, Screen, Transition};
-use crate::utils;
-use crate::ZResult;
+use crate::{
+    core::tactical_map::state,
+    screen::{self, Screen, Transition},
+    utils, ZResult,
+};
 
 #[derive(Copy, Clone, Debug)]
 enum Message {

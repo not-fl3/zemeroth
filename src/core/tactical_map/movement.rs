@@ -45,7 +45,7 @@ pub fn tile_cost(state: &State, _: ObjId, _: PosHex, pos: PosHex) -> MovePoints 
         for &ability in &state.parts().passive_abilities.get(id).0 {
             match ability {
                 PassiveAbility::SpikeTrap | PassiveAbility::Burn | PassiveAbility::Poison => {
-                    return MovePoints(4)
+                    return MovePoints(4);
                 }
                 _ => {}
             }

@@ -1,5 +1,5 @@
-use std::collections::VecDeque;
-use std::time::Duration;
+use std::{collections::VecDeque, time::Duration};
+
 use crate::Action;
 
 #[derive(Debug)]

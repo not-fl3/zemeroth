@@ -3,11 +3,11 @@ use std::{
     time::Duration,
 };
 
+use crate::ui::{self, Gui};
 use ggez::{
     graphics::{self, Font, Point2, Text},
     Context,
 };
-use crate::ui::{self, Gui};
 
 use crate::core::{
     campaign::{Mode, State},
