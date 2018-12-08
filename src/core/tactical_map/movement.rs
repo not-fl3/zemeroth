@@ -1,7 +1,11 @@
 use std::{collections::VecDeque, slice::Windows};
 
-use crate::core::map::{dirs, Dir, Distance, HexMap, PosHex};
-use crate::core::tactical_map::{ability::PassiveAbility, state, ObjId, State, TileType};
+use serde_derive::{Deserialize, Serialize};
+
+use crate::core::{
+    map::{dirs, Dir, Distance, HexMap, PosHex},
+    tactical_map::{ability::PassiveAbility, state, ObjId, State, TileType},
+};
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MovePoints(pub i32);
@@ -31,8 +35,7 @@ impl Default for Tile {
     }
 }
 
-// TODO: const (see https://github.com/rust-lang/rust/issues/24111 )
-pub fn max_cost() -> MovePoints {
+pub const fn max_cost() -> MovePoints {
     MovePoints(i32::max_value())
 }
 

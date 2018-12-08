@@ -1,10 +1,9 @@
-extern crate ggez;
-extern crate ggwp_zgui as ui;
-
-use ggez::conf;
-use ggez::event;
-use ggez::graphics::{self, Font, Point2, Text};
-use ggez::{Context, ContextBuilder, GameResult};
+use ggwp_zgui as ui;
+use ggez::{
+    conf, event,
+    graphics::{self, Font, Point2, Text},
+    Context, ContextBuilder, GameResult,
+};
 
 #[derive(Clone, Copy, Debug)]
 enum Message {

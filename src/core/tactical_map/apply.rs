@@ -1,3 +1,5 @@
+use log::debug;
+
 use crate::core::tactical_map::{
     ability::{self, Ability},
     component::{self, Component},

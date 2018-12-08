@@ -1,9 +1,13 @@
-use crate::core::map::{self, Distance, PosHex};
-use crate::core::tactical_map::{
-    self,
-    ability::{self, Ability},
-    command::{self, Command},
-    state, Attacks, Jokers, Moves, ObjId, State,
+use log::trace;
+
+use crate::core::{
+    map::{self, Distance, PosHex},
+    tactical_map::{
+        self,
+        ability::{self, Ability},
+        command::{self, Command},
+        state, Attacks, Jokers, Moves, ObjId, State,
+    },
 };
 
 pub fn check(state: &State, command: &Command) -> Result<(), Error> {

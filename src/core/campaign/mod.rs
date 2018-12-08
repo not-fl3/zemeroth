@@ -1,3 +1,5 @@
+use serde_derive::{Deserialize, Serialize};
+
 use crate::core::tactical_map::{scenario::Scenario, state::BattleResult, PlayerId};
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq)]

@@ -3,12 +3,13 @@ use std::{
     time::Duration,
 };
 
-use crate::scene::Sprite;
-use crate::ui::{self, Gui};
 use ggez::{
     graphics::{Font, Point2, Text},
     Context,
 };
+use log::debug;
+use scene::Sprite;
+use ui::{self, Gui};
 
 use crate::{
     core::tactical_map::state,

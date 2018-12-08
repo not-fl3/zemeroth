@@ -1,18 +1,22 @@
-use crate::core::map::{self, PosHex};
-use crate::core::tactical_map::{
-    ability::PassiveAbility, utils, ObjId, PlayerId, Strength, TileType,
+use crate::core::{
+    map::{self, PosHex},
+    tactical_map::{ability::PassiveAbility, utils, ObjId, PlayerId, Strength, TileType},
 };
 
 pub use self::private::{BattleResult, State};
 
 mod private {
-    use crate::core::map::{self, HexMap};
-    use crate::core::tactical_map::{
-        command::{self, Command},
-        component::{Component, Parts, Prototypes},
-        execute,
-        scenario::{self, Scenario},
-        ObjId, PlayerId, TileType,
+    use log::error;
+
+    use crate::core::{
+        map::{self, HexMap},
+        tactical_map::{
+            command::{self, Command},
+            component::{Component, Parts, Prototypes},
+            execute,
+            scenario::{self, Scenario},
+            ObjId, PlayerId, TileType,
+        },
     };
 
     #[derive(Clone, Debug)]

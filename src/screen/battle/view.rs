@@ -1,21 +1,25 @@
 use std::{collections::HashMap, time::Duration};
 
-use crate::scene::{action, Action, Boxed, Layer, Scene, Sprite};
 use ggez::{
     graphics::{Color, Font, Image, Point2, Text /*, Vector2*/},
     Context,
 };
 use rand::{thread_rng, Rng};
+use scene::{action, Action, Boxed, Layer, Scene, Sprite};
 
-use crate::core::map::{self, Distance, HexMap, PosHex};
-use crate::core::tactical_map::{
-    self, ability::Ability, command, execute::hit_chance, movement, Jokers, Moves, ObjId, State,
-    TileType,
+use crate::{
+    core::{
+        map::{self, Distance, HexMap, PosHex},
+        tactical_map::{
+            self, ability::Ability, command, execute::hit_chance, movement, Jokers, Moves, ObjId,
+            State, TileType,
+        },
+    },
+    geom::{self, hex_to_point},
+    screen::battle::visualize,
+    utils::time_s,
+    ZResult,
 };
-use crate::geom::{self, hex_to_point};
-use crate::screen::battle::visualize;
-use crate::utils::time_s;
-use crate::ZResult;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SelectionMode {

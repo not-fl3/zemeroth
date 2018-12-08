@@ -3,19 +3,21 @@ use std::{
     time::Duration,
 };
 
-use crate::ui::{self, Gui};
 use ggez::{
     graphics::{self, Font, Point2, Text},
     Context,
 };
+use log::info;
+use ui::{self, Gui};
 
-use crate::core::{
-    campaign::{Mode, State},
-    tactical_map::{scenario, state::BattleResult, PlayerId},
+use crate::{
+    core::{
+        campaign::{Mode, State},
+        tactical_map::{scenario, state::BattleResult, PlayerId},
+    },
+    screen::{self, Screen, Transition},
+    utils, ZResult,
 };
-use crate::screen::{self, Screen, Transition};
-use crate::utils;
-use crate::ZResult;
 
 #[derive(Clone, Debug)]
 enum Message {

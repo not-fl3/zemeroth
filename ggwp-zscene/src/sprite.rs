@@ -1,9 +1,9 @@
-use std::cell::RefCell;
-use std::path::Path;
-use std::rc::Rc;
+use std::{cell::RefCell, path::Path, rc::Rc};
 
-use ggez::graphics::{self, Point2, Rect, Vector2};
-use ggez::{Context, GameResult};
+use ggez::{
+    graphics::{self, Point2, Rect, Vector2},
+    Context, GameResult,
+};
 
 #[derive(Debug, Clone)]
 struct SpriteData {

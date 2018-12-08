@@ -7,12 +7,13 @@ use ggez::{
     graphics::{self, Font, Point2, Text},
     Context,
 };
+use log::info;
+use scene::{Layer, Scene, Sprite};
+use ui::{self, Gui};
 
 use crate::{
     core::tactical_map::state,
-    scene::{Layer, Scene, Sprite},
     screen::{self, Screen, Transition},
-    ui::{self, Gui},
     utils, ZResult,
 };
 

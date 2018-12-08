@@ -1,5 +1,9 @@
-use crate::core::map::Distance;
-use crate::core::tactical_map::{Attacks, Strength};
+use serde_derive::{Deserialize, Serialize};
+
+use crate::core::{
+    map::Distance,
+    tactical_map::{Attacks, Strength},
+};
 
 /// Active ability.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

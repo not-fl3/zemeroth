@@ -1,32 +1,37 @@
 use std::{path::Path, sync::mpsc::Sender, time::Duration};
 
-use crate::scene::{action, Action, Boxed};
-use crate::ui::{self, Gui};
 use ggez::{
     graphics::{self, Font, Point2, Text},
     Context,
 };
+use log::{debug, info};
+use scene::{action, Action, Boxed};
+use ui::{self, Gui};
 
-use crate::core::map::PosHex;
-use crate::core::tactical_map::{
-    self, ability,
-    ability::Ability,
-    ai::Ai,
-    check, command,
-    component::Prototypes,
-    effect,
-    movement::Pathfinder,
-    scenario,
-    state::{self, BattleResult},
-    ObjId, PlayerId, State,
+use crate::{
+    core::{
+        map::PosHex,
+        tactical_map::{
+            self, ability,
+            ability::Ability,
+            ai::Ai,
+            check, command,
+            component::Prototypes,
+            effect,
+            movement::Pathfinder,
+            scenario,
+            state::{self, BattleResult},
+            ObjId, PlayerId, State,
+        },
+    },
+    geom,
+    screen::{
+        battle::view::{make_action_create_map, BattleView, SelectionMode},
+        Screen, Transition,
+    },
+    utils::{self, time_s},
+    ZResult,
 };
-use crate::geom;
-use crate::screen::{
-    battle::view::{make_action_create_map, BattleView, SelectionMode},
-    Screen, Transition,
-};
-use crate::utils::{self, time_s};
-use crate::ZResult;
 
 mod view;
 mod visualize;

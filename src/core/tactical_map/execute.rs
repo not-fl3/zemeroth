@@ -1,20 +1,23 @@
 use std::collections::HashMap;
 
+use log::{debug, error, trace};
 use rand::{thread_rng, Rng};
 
-use crate::core::map::{self, Dir, PosHex};
-use crate::core::tactical_map::{
-    self,
-    ability::{self, Ability, PassiveAbility},
-    apply::apply,
-    check::{check, Error},
-    command::{self, Command},
-    component::{self, Component},
-    effect::{self, Duration, Effect},
-    event::{self, ActiveEvent, Event},
-    movement::Path,
-    state::{self, BattleResult, State},
-    utils, Moves, ObjId, Phase, PlayerId, Strength,
+use crate::core::{
+    map::{self, Dir, PosHex},
+    tactical_map::{
+        self,
+        ability::{self, Ability, PassiveAbility},
+        apply::apply,
+        check::{check, Error},
+        command::{self, Command},
+        component::{self, Component},
+        effect::{self, Duration, Effect},
+        event::{self, ActiveEvent, Event},
+        movement::Path,
+        state::{self, BattleResult, State},
+        utils, Moves, ObjId, Phase, PlayerId, Strength,
+    },
 };
 
 #[derive(PartialEq, Clone, Copy, Debug)]
