@@ -36,8 +36,8 @@ impl Phase {
     }
 }
 
-#[serde(transparent)]
 #[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize, derive_more::From)]
+#[serde(transparent)]
 pub struct Rounds(pub i32);
 
 impl Rounds {
